@@ -20,6 +20,8 @@ package com.redhat.amq.broker.core.server.metrics.plugins;
 import java.util.Map;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
+import io.micrometer.core.instrument.binder.system.UptimeMetrics;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import org.apache.activemq.artemis.core.server.metrics.ActiveMQMetricsPlugin;
@@ -37,5 +39,11 @@ public class ArtemisPrometheusMetricsPlugin implements ActiveMQMetricsPlugin {
    @Override
    public MeterRegistry getRegistry() {
       return meterRegistry;
+   }
+
+   @Override
+   public void bind() {
+     new ProcessorMetrics().bindTo(meterRegistry);
+     new UptimeMetrics().bindTo(meterRegistry);
    }
 }
